@@ -1,7 +1,7 @@
 resource "aws_instance" "main" {
   ami           = local.ami_id
   instance_type = var.instance_type
-  subnet_id = local.private_subnet_id
+  subnet_id = local.private_subnet_ids
   vpc_security_group_ids = [local.sg_id]
   
   tags = merge(
@@ -67,8 +67,8 @@ resource "aws_lb_target_group" "main" {
     healthy_threshold = 2
     unhealthy_threshold = 2
     interval = 10
-    path = var.health_check_path
-    port = var.port_number
+    path = local.health_check_path
+    port = local.port_number
     matcher = "200-299"
     protocol = "HTTP"
     timeout = 5
@@ -184,7 +184,7 @@ resource "aws_autoscaling_policy" "main" {
 }
 
 resource "aws_lb_listener_rule" "main" {
-  listener_arn = local.backend_alb_listener_arn
+  listener_arn = local.alb_listener_arn
   priority     = var.rule_priority
 
   action {
@@ -194,7 +194,7 @@ resource "aws_lb_listener_rule" "main" {
 
   condition {
     host_header {
-      values = ["${component}.backend-alb-${var.environment}.${var.domain_name}"]
+      values = [local.host_header]
     }
   }
 }
