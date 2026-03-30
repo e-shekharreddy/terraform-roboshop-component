@@ -203,11 +203,11 @@ resource "terraform_data" "main_delete" {
   triggers_replace = [
     aws_instance.main.id
   ]
-    depends_on = [aws_autoscaling_policy.main]
+  depends_on = [aws_autoscaling_policy.main]
 
-    # here local means terraform excuted in bastaion
-    provisioner "local-exec" {
-       command = "aws ec2 terminate-instances --instance-ids ${aws_instance.mani.id}"
+  # here local means terraform excuted in bastaion
+  provisioner "local-exec" {
+      command = "aws ec2 terminate-instances --instance-ids ${aws_instance.mani.id}"
 
-    }
+  }
 }
