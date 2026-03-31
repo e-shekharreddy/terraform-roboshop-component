@@ -1,7 +1,7 @@
 resource "aws_instance" "main" {
   ami           = local.ami_id
   instance_type = var.instance_type
-  subnet_id = local.private_subnet_ids
+  subnet_id = local.private_subnet_id
   vpc_security_group_ids = [local.sg_id]
   
   tags = merge(
@@ -207,7 +207,7 @@ resource "terraform_data" "main_delete" {
 
   # here local means terraform excuted in bastaion
   provisioner "local-exec" {
-      command = "aws ec2 terminate-instances --instance-ids ${aws_instance.mani.id}"
+      command = "aws ec2 terminate-instances --instance-ids ${aws_instance.main.id}"
 
   }
 }
